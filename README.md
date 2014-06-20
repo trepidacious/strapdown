@@ -12,7 +12,9 @@ You will need Node.js (>0.6.x) and CoffeeScript to generate the bundles. To bund
 
 ```
 $ npm install
-$ coffee bundle <version_number>
+$ coffee bundle.coffee <version_number>
 ```
+
+This will build bundled files in the `v` output directory, specifically `v/<version_number>`. Bundled files are based on the strapdown sources from `src` and the vendor sources (bootstrap, marked, prettify etc.) in `vendor`
 
 Bug fixes should go in the latest version - no need to bump it. New features or anything that changes the old behavior should go into a bumped version.
