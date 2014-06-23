@@ -340,7 +340,7 @@ $( document ).ready(function() {
 
   //////////////////////////////////////////////////////////////////////
   //
-  // Extract markdown text, and replace it with a bootstrap container
+  // Extract markdown text from xmp element, then remove that element
   //
 
   var markdownEl = $("xmp:first").first();//document.getElementsByTagName('xmp')[0] || document.getElementsByTagName('textarea')[0];
@@ -351,7 +351,7 @@ $( document ).ready(function() {
   }
 
   var markdown = markdownEl.text();
-  markdownEl.replaceWith($("<div id = 'content' class='container'></div>"));
+  markdownEl.remove();
 
   //////////////////////////////////////////////////////////////////////
   //
@@ -361,7 +361,8 @@ $( document ).ready(function() {
   // Generate HTML from Markdown
   var markdownHtml = marked(markdown);
 
-  $("#content").html(markdownHtml)
+  // Put the HTML in element with class "markdown-content"
+  $(".markdown-content").html(markdownHtml)
 
   // Prettify code elements if a language is specified in their class,
   // e.g. via GitHub style 
@@ -379,11 +380,22 @@ $( document ).ready(function() {
   // Style tables for bootstrap
   $("table").addClass("table table-striped table-bordered");
 
-  // Add ids to headers based on contents, helps with TOC etc.
-  var headers = $(":header");
+  //Process all headers within markdown
+  var headers = $(".markdown-content").find(":header");
+  var toc = "<ul>";
   headers.each(function(){
-    this.id = "header-" + this.innerHTML;
+    var text = $(this).text();
+    var id = "header-" + text;
+    // Add ids to headers based on contents, helps with TOC etc.
+    this.id = id;
+    // $(this).addClass("page-header")
+    // Build a TOC
+    toc = toc + '<li><a href="#' + id + '">' + text + '</a></li>'
   })
+  toc = toc + "</ul>"
+
+  //Add toc in element with class "markdown-content"
+  $(".markdown-toc").html(toc)
 
   // Make images responsive
   $("img").addClass("img-responsive");
