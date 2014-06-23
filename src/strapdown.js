@@ -47,7 +47,7 @@ $( document ).ready(function() {
 
   //Process all headers within markdown
   var headers = $(".markdown-content").find(":header");
-  var toc = "<ul>";
+  var toc = '';
   headers.each(function(){
     var text = $(this).text();
     var id = "header-" + text;
@@ -57,7 +57,6 @@ $( document ).ready(function() {
     // Build a TOC
     toc = toc + '<li><a href="#' + id + '">' + text + '</a></li>'
   })
-  toc = toc + "</ul>"
 
   //Add toc in element with class "markdown-content"
   $(".markdown-toc").html(toc)
