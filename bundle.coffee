@@ -19,7 +19,6 @@ else
 
 # JS
 bundle = ''
-bundle += (cat 'vendor/jquery.min.js') + '\n'
 bundle += (cat 'vendor/marked.min.js') + '\n'
 bundle += (cat 'vendor/prettify.min.js') + '\n'
 bundle += (cat 'src/strapdown.js') + '\n'
@@ -27,8 +26,6 @@ bundle.to outDir + '/strapdown.js'
 
 # CSS
 cp '-f', 'src/strapdown.css', outDir
-mkdir '-p', outDir + '/themes'
-cp '-f', 'vendor/themes/*', outDir + '/themes'
 
 # Update ver in index.html
 content = cat 'index.html'
