@@ -1,4 +1,4 @@
-;(function(window, document) {
+$( document ).ready(function() {
 
   // Hide body until we're done fiddling with the DOM
   document.body.style.display = 'none';
@@ -28,23 +28,32 @@
 
   $("#content").html(markdownHtml)
 
-  // Prettify code elements if a language is specified in their class
+  // Prettify code elements if a language is specified in their class,
+  // e.g. via GitHub style 
+  //
+  //    ```ruby
+  //    print("hello world")
+  //    ```
+  //
   $("code").each(function(){
     var lang = this.className;
     if (lang != '') this.className = "prettyprint lang-" + lang;
   })
   prettyPrint();
 
-  // Style tables
+  // Style tables for bootstrap
   $("table").addClass("table table-striped table-bordered");
 
-  // Add ids to headers based on contents
+  // Add ids to headers based on contents, helps with TOC etc.
   var headers = $(":header");
   headers.each(function(){
-    this.id = this.innerHTML;
+    this.id = "header-" + this.innerHTML;
   })
+
+  // Make images responsive
+  $("img").addClass("img-responsive");
 
   // All done - show body
   document.body.style.display = "";
 
-})(window, document);
+})

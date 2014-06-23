@@ -333,7 +333,7 @@ prettyPrintingJob={langExtension:langExtension,sourceNode:cs,numberLines:lineNum
 if(k<elements.length){setTimeout(doWork,250);}else if(opt_whenDone){opt_whenDone();}}
 doWork();}
 var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':registerLangHandler,'sourceDecorator':sourceDecorator,'PR_ATTRIB_NAME':PR_ATTRIB_NAME,'PR_ATTRIB_VALUE':PR_ATTRIB_VALUE,'PR_COMMENT':PR_COMMENT,'PR_DECLARATION':PR_DECLARATION,'PR_KEYWORD':PR_KEYWORD,'PR_LITERAL':PR_LITERAL,'PR_NOCODE':PR_NOCODE,'PR_PLAIN':PR_PLAIN,'PR_PUNCTUATION':PR_PUNCTUATION,'PR_SOURCE':PR_SOURCE,'PR_STRING':PR_STRING,'PR_TAG':PR_TAG,'PR_TYPE':PR_TYPE,'prettyPrintOne':win['prettyPrintOne']=prettyPrintOne,'prettyPrint':win['prettyPrint']=prettyPrint};if(typeof define==="function"&&define['amd']){define("google-code-prettify",[],function(){return PR;});}})();
-;(function(window, document) {
+$( document ).ready(function() {
 
   // Hide body until we're done fiddling with the DOM
   document.body.style.display = 'none';
@@ -363,24 +363,33 @@ var PR=win['PR']={'createSimpleLexer':createSimpleLexer,'registerLangHandler':re
 
   $("#content").html(markdownHtml)
 
-  // Prettify code elements if a language is specified in their class
+  // Prettify code elements if a language is specified in their class,
+  // e.g. via GitHub style 
+  //
+  //    ```ruby
+  //    print("hello world")
+  //    ```
+  //
   $("code").each(function(){
     var lang = this.className;
     if (lang != '') this.className = "prettyprint lang-" + lang;
   })
   prettyPrint();
 
-  // Style tables
+  // Style tables for bootstrap
   $("table").addClass("table table-striped table-bordered");
 
-  // Add ids to headers based on contents
+  // Add ids to headers based on contents, helps with TOC etc.
   var headers = $(":header");
   headers.each(function(){
-    this.id = this.innerHTML;
+    this.id = "header-" + this.innerHTML;
   })
+
+  // Make images responsive
+  $("img").addClass("img-responsive");
 
   // All done - show body
   document.body.style.display = "";
 
-})(window, document);
+})
 
