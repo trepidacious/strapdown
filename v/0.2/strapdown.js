@@ -355,16 +355,47 @@ $( document ).ready(function() {
   $("table").addClass("table table-striped table-bordered");
 
   //Process all headers within markdown
-  var headers = $(".markdown-content").find(":header");
+  var headers = $(".markdown-content").find("h1, h2, h3, h4, h5, h6");
   var toc = '';
+  var previousLevel = 0;
+  var levelNames = ["", "", "", "", "", ""]
   headers.each(function(){
+
+    //Use zero-based level numbering - h1 is level 0
+    var level = this.tagName[1] - 1
+
+    //Get text in header, and sanitise to use as part of an id
     var text = $(this).text();
-    var id = "header-" + text;
+    var idText = text.replace(/[^a-zA-Z0-9_]+/g, "_")
+
+    //The sanitised text is now the name for the current level, until
+    //replaced by another heading at the same level
+    levelNames[level] = idText
+
+    //Now build the actual id, starting with Section__ to avoid conflicts and ensure id starts with an alphabetic character
+    var id = "Section__";
+    for (i = 0; i < level; i++) {
+     id += levelNames[i] + "__";
+    }
+    id += idText;
+    
     // Add ids to headers based on contents, helps with TOC etc.
     this.id = id;
-    // $(this).addClass("page-header")
-    // Build a TOC
-    toc = toc + '<li><a href="#' + id + '">' + text + '</a></li>'
+
+    //Add the header to the TOC, using nested ul's
+    if (previousLevel == level) {
+      toc += '</li>';
+    } else {
+      while (previousLevel < level) {
+        toc += '<ul class="nav">';
+        previousLevel++;
+      }
+      while (previousLevel > level) {
+        toc += '</li></ul></li>';
+        previousLevel--;
+      }
+    }
+    toc += '<li><a href="#' + id + '">' + text + '</a>'
   })
 
   //Add toc in element with class "markdown-content"
